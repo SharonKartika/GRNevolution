@@ -65,4 +65,5 @@ function evolveNet(J::AbstractMatrix,
 ### Features to be added
 
 -   Ability to take in any network representation (Interaction matrix, Topo files, etc.). 
--   Library of useful cost functions, and associated functions (RACIPE, CSB, etc)
+-   Library of useful cost functions, and associated functions (RACIPE, CSB, etc.).
+-   More sophisticated algorithms (simulated annealing, recombination etc.).
