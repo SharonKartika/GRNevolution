@@ -40,6 +40,8 @@ X, Xs = evolveNet(J, fitnessfunction)
 
 `evolveNetTabu`: Keeps a list of networks seen in the last `k` generations (default `k=10`). Generated mutants are considered only if they are not in this list. 
 
+`evolveNetMonotone`: A mutant is selected only if its score is greater than all the networks previously seen. (And thus may return fewer selected networks than the number of iterations).
+
 
 
 ### Additional arguments
@@ -56,7 +58,7 @@ function evolveNet(J::AbstractMatrix,
 
 `nmutants`: number of mutants generated in each iteration.
 
-`nr`: number of elements mutated at each iteration. (If `0` is passed, the offspring are single allele mutated). 
+`nr`: number of elements mutated at each iteration. (If `0` is passed, the mutation rate is 10%. _i.e,_ 10% of the edges are mutated). 
 
 `niter`: number of iterations of mutation-selection.
 
@@ -64,6 +66,7 @@ function evolveNet(J::AbstractMatrix,
 
 ### Features to be added
 
+-   Preserve the current network along with the mutants, in the list of mutants. 
 -   Ability to take in any network representation (Interaction matrix, Topo files, etc.). 
 -   Library of useful cost functions, and associated functions (RACIPE, CSB, etc.).
 -   More sophisticated algorithms (simulated annealing, recombination etc.).
