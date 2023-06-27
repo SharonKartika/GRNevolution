@@ -15,14 +15,17 @@ function createMutant(J::AbstractMatrix; nr::Int=0)
     l = length(J)
     (nr == 0) ? (nr = l ÷ 10) : () #10% mutation rate 
     J[sample(1:l, nr, replace=false)] = rand(-1:1, nr)
-    # ensure that all the nodes are connected.  
-    # see if the network has empty crosses. If yes, add random element in the row.
-    # nzeros = zeros(Int, n)
-    # for i in 1:n
-    #     if (J[i, :] == nzeros) && (J[:, i] == nzeros)
-    #         J[i, rand(1:n)] = rand([-1, 1])
-    #     end
-    # end
+    #=
+    ensure that all the nodes are connected.  
+    see if the network has empty crosses. If yes, add random element in the row.
+    =#
+    n = size(J, 2)
+    nzeros = zeros(Int, n)
+    for i in 1:n
+        if (J[i, :] == nzeros) && (J[:, i] == nzeros)
+            J[i, rand(1:n)] = rand([-1, 1])
+        end
+    end
     return J
 end
 
