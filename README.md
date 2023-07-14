@@ -2,6 +2,8 @@
 
 Functions to apply evolutionary algorithms to models of GRN are included here.
 
+![Alt text](image.png)
+
 ### Steps
 
 Include the script in Julia environment 

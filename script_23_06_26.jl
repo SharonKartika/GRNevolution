@@ -3,7 +3,7 @@
 include("ModularEvolutionScript.jl")
 include("analysisutils.jl")
 include("CSBscript.jl")
-using CSV
+using CSV, LinearAlgebra
 
 nn = 4
 ngoodnetworks = 20
@@ -12,12 +12,15 @@ cost = costs[3]
 
 costfunc(J) = getPscore(calcFreq(solveCSB(J,100)),cost)
 
-J = rand(-1:1, nn, nn)
-X, Xs = evolveNetBlind(J, costfunc)
-net, netscore = X[end], Xs[end]
-
-topofile = interaction2topo(net)
-CSV.write("BestNetworks/$(cost)_$(round(rand(),digits=5)).topo",
-    topofile,
-    delim='\t')
-
+# J = rand(-1:1, nn, nn)
+for _ in 1:100
+    J = ones(Int,nn, nn) - I
+    X, Xs = evolveNetBlind(J, costfunc)
+    net, netscore = X[end], Xs[end]
+    plot(Xs)
+        
+    topofile = interaction2topo(net)
+    CSV.write("BestNetworks/fromFullyConnected$(cost)_$(round(rand(),digits=5)).topo",
+        topofile,
+        delim='\t')
+end
