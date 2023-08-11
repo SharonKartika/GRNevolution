@@ -89,7 +89,22 @@ function getAllBinaryStrings(n)
     return f("", x, n, 0)
 end
 
+J = rand(-1:1, 3, 3)
+x = rand(0:0.001:1, size(J)[1])
 
+# can be calculated for a network, state pair 
+function calcFrust(J, x::Vector{Float64})
+    n, m = size(J)
+    Ef = 0 # #frustrated edges
+    Et = sum(abs.(J)) # #edges (nonzero)
+    for i in 1:n, j in 1:m  
+        if J[i, j] * x[i] * x[j] < 0
+            Ef += 1
+        end
+    end
+    Ef / Et 
+end
 
+exprLevelsStringToVec(x::String) = split(x, "") .|> x->parse(Float64, x)
 
-
+calcFrusta(J, x::String) = calcFrust(J, exprLevelsStringToVec(x))

@@ -1,4 +1,5 @@
 using SparseArrays
+using StatsBase
 """Returns a list of strings containing `1`s and `0`s,
 which are monopositive"""
 function getMonopositiveStrings(n)
@@ -13,20 +14,38 @@ function interaction2topo(tNet::AbstractMatrix)
     df
 end
 
+function topo2interaction(df::DataFrame)
+    dropmissing!(df)
+    Nodes = sort(unique(vcat(df.Source, df.Target)))
+    n_nodes = length(Nodes)
+    update_matrix = zeros(Int64, n_nodes, n_nodes)
+    for i in 1:size(df, 1)
+        if df[i, 3] == 2
+            df[i,3] = -1
+        end
+        j = findfirst(x->x==df[i,1], Nodes)
+        k = findfirst(x->x==df[i,2], Nodes)
+        update_matrix[j,k] = Int64(df[i,3])
+    end
+    return update_matrix
+end
+
 """Takes in the result of simulation
 (a list of strings of outputs), and finds the relative
 frequencies of each unique state."""
-function calcFreq(dfr)
+function calcFreq(dfr, forceMonoFreq=false)
     D = proportionmap(dfr)
     dfFreq = DataFrame(Sequence=collect(keys(D)), RelFreq=collect(values(D)))
     #=for when a monopositive state is not present 
     in the output of an evaluation.=#
     S = getMonopositiveStrings(length(dfr[1,1]))
-    for i in S
-        if !(i in dfFreq.Sequence)
-            push!(dfFreq, (i, 0.0))
-        end
-    end 
+    if forceMonoFreq
+        for i in S
+            if !(i in dfFreq.Sequence)
+                push!(dfFreq, (i, 0.0))
+            end
+        end 
+    end
     dfFreq
 end
 
@@ -34,7 +53,6 @@ end
 function ainb(a, b)
     [i for i in 1:length(a) if a[i] in b]
 end
-
 
 function getPscore(dfFreq, scoretype::String="sum")
     nn = length(dfFreq[1, 1]) #number of nodes in network

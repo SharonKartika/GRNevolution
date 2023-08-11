@@ -15,12 +15,14 @@ costfunc(J) = getPscore(calcFreq(solveCSB(J,100)),cost)
 # J = rand(-1:1, nn, nn)
 for _ in 1:100
     J = ones(Int,nn, nn) - I
-    X, Xs = evolveNetBlind(J, costfunc)
+    X, Xs = evolveNetBlind(J, costfunc) 
     net, netscore = X[end], Xs[end]
-    plot(Xs)
+    # plot(Xs)
         
-    topofile = interaction2topo(net)
-    CSV.write("BestNetworks/fromFullyConnected$(cost)_$(round(rand(),digits=5)).topo",
-        topofile,
-        delim='\t')
+    # topofile = interaction2topo(net)
+    # CSV.write("BestNetworks/fromFullyConnected$(cost)_$(round(rand(),digits=5)).topo",
+    #     topofile,
+    #     delim='\t')
 end
+
+
